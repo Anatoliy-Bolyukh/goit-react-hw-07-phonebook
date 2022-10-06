@@ -1,15 +1,16 @@
+import { useEffect } from 'react';
 import Notiflix from 'notiflix';
 import ContactForm from './ContactForm/ContactForm';
 import Filter from './Filter/Filter';
 import ContactList from './ContactList/ContactList';
 import { nanoid } from 'nanoid';
 import { useDispatch, useSelector } from 'react-redux';
-import {createContacts} from '../redux/contactsSlice'
+import {createContacts, fetchContacts} from '../redux/contactsSlice'
 
 
 function App() {
 
-  const contacts = useSelector(state => state.contacts)
+  const contacts = useSelector(state => state.contacts.items)
   const dispatch = useDispatch()
   
   
@@ -40,6 +41,10 @@ function App() {
     dispatch(createContacts(dataContacts));
 
   }
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
   
       return (
         <div style={{

@@ -13,13 +13,6 @@ const ContactList = () => {
     item.name.toLowerCase().includes(filter.toLowerCase())
   );
 
-// const getContacts()
-
-// console.log(filterContacts);
-// useEffect(() => {
-//   dispatch(fetchContacts())
-// }, [dispatch]);
-
   return (
     <div>
       <ul>

@@ -1,7 +1,5 @@
 import { useState } from 'react';
 
-
-
 export default function ContactForm({ handleSubmit }) {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');

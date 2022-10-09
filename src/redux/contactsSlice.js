@@ -1,17 +1,5 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
-export const fetchContacts = createAsyncThunk(
-  'contacts/fetchContacts',
-  async function () {
-    const response = await fetch('https://633f31c70dbc3309f3c69521.mockapi.io/contact');
-
-    const data = await response.json();
-    
-    return data;
-  }
-);
-  
-
+import { createSlice } from '@reduxjs/toolkit';
+import { fetchContacts, addContact, removeContact} from './requestServer';
 
 // const data = [
 //   { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
@@ -20,37 +8,56 @@ export const fetchContacts = createAsyncThunk(
 //   { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
 // ];
 
-
 const contactsSlice = createSlice({
   name: 'contacts',
   initialState: {
     items: [],
-    status: null,
+    isLoading: false,
     error: null,
   },
 
-  reducers: {
-    createContacts(state, action) {state.push(action.payload)},
-    deleteContacts(state, action) {
-      const index = state.findIndex(contact => contact.id === action.payload);
-      state.splice(index, 1);
-    },
-  },
+  
   extraReducers: {
-    [fetchContacts.pending]: (state, action) => { 
-      state.status = 'loaging';
-      state.error = 'error'
+    [fetchContacts.pending]: (state, action) => {
+      state.isLoading = 'true';
+      state.error = 'null';
     },
-    [fetchContacts.fulfilled]: (state, action) => { 
-      state.status = 'resolved';
-      state.contacts = action.payload;
-      
+    [fetchContacts.fulfilled]: (state, action) => {
+      state.isLoading = 'false';
+      state.items = action.payload;
     },
-    [fetchContacts.rejected]: (state, action) => { },
+    [fetchContacts.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    [removeContact.pending]: state => {
+      state.isLoading = true;
+      state.error = null;
+    },
+    [removeContact.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.items = state.items.filter(
+        contact => contact.id !== action.payload
+      );
+    },
+    [removeContact.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    [addContact.pending]: state => {
+      state.isLoading = true;
+      state.error = null;
+    },
+    [addContact.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.items.push(action.payload);
+    },
+    [addContact.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
   },
-})
-
-
+});
 
 export default contactsSlice.reducer;
 export const { createContacts, deleteContacts } = contactsSlice.actions;

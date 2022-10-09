@@ -5,7 +5,9 @@ import Filter from './Filter/Filter';
 import ContactList from './ContactList/ContactList';
 import { nanoid } from 'nanoid';
 import { useDispatch, useSelector } from 'react-redux';
-import {createContacts, fetchContacts} from '../redux/contactsSlice'
+import { addContact } from '../redux/requestServer'
+
+import { fetchContacts } from '../redux/requestServer'
 
 
 function App() {
@@ -38,13 +40,14 @@ function App() {
       number,
     }
 
-    dispatch(createContacts(dataContacts));
+    dispatch(addContact(dataContacts));
 
   }
 
   useEffect(() => {
     dispatch(fetchContacts());
-  }, [dispatch]);
+  // eslint-disable-next-line
+  }, []);
   
       return (
         <div style={{
